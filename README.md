@@ -1,3 +1,5 @@
+Sample Vagrantfie:
+
 ```
 # -*- mode: ruby -*-
 # vi: set ft=ruby :

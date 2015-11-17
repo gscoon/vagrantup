@@ -1,31 +1,33 @@
-```
-
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-
-ipythonPort = 8888
-ipythonHost = 4545
-sparkUIPort = 4040
-pulsePort 	= 1111
 
 $script = <<SCRIPT
 # APT-GET
 sudo apt-get update
 sudo apt-get upgrade
 
-
-
 # GIT
 sudo apt-get install git
 
+# curl
+sudo apt-get -y install curl
+sudo apt-get install ca-certificates
+
 # Node JS
-sudo apt-get --purge remove node
-sudo apt-get --purge remove nodejs-legacy
-sudo apt-get --purge remove nodejs
-sudo apt-get install nodejs-legacy
+sudo apt-get -y --purge remove node
+sudo apt-get -y --purge remove nodejs-legacy
+sudo apt-get -y --purge remove nodejs
+sudo apt-get install -y nodejs-legacy
+
+# build essentials?
+sudo apt-get install -y build-essential libssl-dev libffi-dev
+
+$ other curl stuff; helps with nvm below
+sudo mkdir -p /etc/pki/tls/certs
+sudo cp /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
 
 # PIP
-apt-get -y install python-pip
+sudo apt-get -y install python-pip
 sudo pip install --upgrade pip
 sudo pip install --upgrade virtualenv
 
@@ -41,6 +43,10 @@ export PATH=/home/vagrant/anaconda/bin:$PATH
 END
 rm $anaconda
 
+# NVM
+curl https://raw.githubusercontent.com/creationix/nvm/v0.16.1/install.sh | sh
+source ~/.profile
+
 # NPM
 sudo apt-get install -y npm
 
@@ -55,9 +61,9 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "dev"
   
-  config.vm.box = "hashicorp/precise64"
+  config.vm.box = "ubuntu/trusty64"
 	
-  config.vm.network "private_network", ip: "192.168.1.234"
+  config.vm.network "private_network", type: "dhcp"
 
   config.vm.provider :virtualbox do |v|
   	v.memory = 1024
@@ -68,4 +74,3 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder ".", "/home/projects"
 
 end
-```
